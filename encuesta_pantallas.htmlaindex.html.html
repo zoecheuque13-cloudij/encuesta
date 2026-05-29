@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pantallas y Niños — Encuesta con Informe IA</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,700;1,400&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #F0EDE6;
+  --card: #FAFAF7;
+  --ink: #1C1A16;
+  --rust: #B8401A;
+  --sage: #3D6B52;
+  --gold: #C89A2E;
+  --mist: #DDD9D0;
+  --light: #E8E4DC;
+  --white: #FFFFFF;
+  --sky: #2E5F8A;
+}
+
+body {
+  font-family: 'Outfit', sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  min-height: 100vh;
+}
+
+/* ── HERO ── */
+.hero {
+  background: var(--ink);
+  padding: 3rem 2rem 3rem;
+  position: relative;
+  overflow: hidden;
+}
+.hero-circles { position: absolute; inset: 0; pointer-events: none; }
+.hero-circles span { position: absolute; border-radius: 50%; }
+.hero-circles span:nth-child(1) { width:300px; height:300px; background:var(--rust); opacity:0.12; top:-100px; right:-80px; }
+.hero-circles span:nth-child(2) { width:180px; height:180px; background:var(--gold); opacity:0.10; bottom:-60px; left:5%; }
+.hero-circles span:nth-child(3) { width:80px; height:80px; background:var(--sky); opacity:0.15; top:40%; left:55%; }
+.hero-inner { position:relative; z-index:1; max-width:640px; margin:0 auto; }
+.badge {
+  display:inline-flex; align-items:center; gap:0.4rem;
+  font-size:0.62rem; font-weight:600; letter-spacing:0.18em;
+  text-transform:uppercase; color:var(--gold);
+  border:1px solid rgba(200,154,46,0.4);
+  padding:0.28rem 0.75rem; border-radius:2px; margin-bottom:1.4rem;
+}
+.hero h1 { font-family:'Lora',serif; font-size:clamp(1.8rem,5vw,2.8rem); font-weight:700; line-height:1.1; color:#FFFFFF; margin-bottom:0.8rem; }
+.hero h1 em { font-style:italic; color:var(--gold); }
+.hero p { font-size:0.88rem; color:rgba(255,255,255,0.55); line-height:1.65; max-width:420px; }
+
+/* ── PROGRESS ── */
+.prog-bar-wrap { background:var(--ink); padding:0 2rem 1.6rem; }
+.prog-inner { max-width:640px; margin:0 auto; }
+.prog-labels { display:flex; justify-content:space-between; font-size:0.72rem; color:rgba(255,255,255,0.35); margin-bottom:0.45rem; letter-spacing:0.04em; }
+.prog-track { height:2px; background:rgba(255,255,255,0.12); border-radius:2px; overflow:hidden; }
+.prog-fill { height:100%; background:var(--gold); border-radius:2px; width:0%; transition:width 0.5s cubic-bezier(0.4,0,0.2,1); }
+
+/* ── FORM WRAPPER ── */
+.form-wrap { max-width:640px; margin:0 auto; padding:2.5rem 1.5rem 5rem; }
+
+/* ── SECTION DIVIDER ── */
+.section-divider {
+  display: flex; align-items: center; gap: 0.8rem;
+  margin: 2rem 0 1.2rem;
+}
+.section-divider-line { flex: 1; height: 1px; background: var(--mist); }
+.section-divider-label {
+  font-size: 0.65rem; font-weight: 600; letter-spacing: 0.16em;
+  text-transform: uppercase; color: var(--sage);
+  background: rgba(61,107,82,0.08); border: 1px solid rgba(61,107,82,0.2);
+  padding: 0.3rem 0.8rem; border-radius: 2px; white-space: nowrap;
+}
+
+/* ── QUESTION CARD ── */
+.q-card {
+  background:var(--card); border:1px solid var(--mist); border-top:3px solid var(--rust);
+  border-radius:4px; padding:1.8rem 1.8rem 2rem; margin-bottom:1.4rem;
+  animation:fadeUp 0.35s ease both;
+}
+@keyframes fadeUp { from{opacity:0;transform:translateY(14px);} to{opacity:1;transform:translateY(0);} }
+.q-card:nth-child(2){animation-delay:.04s} .q-card:nth-child(3){animation-delay:.08s}
+.q-card:nth-child(4){animation-delay:.12s} .q-card:nth-child(5){animation-delay:.16s}
+.q-card:nth-child(6){animation-delay:.20s} .q-card:nth-child(7){animation-delay:.24s}
+.q-card:nth-child(8){animation-delay:.28s} .q-card:nth-child(9){animation-delay:.32s}
+.q-card:nth-child(10){animation-delay:.36s} .q-card:nth-child(11){animation-delay:.40s}
+.q-card:nth-child(12){animation-delay:.44s} .q-card:nth-child(13){animation-delay:.48s}
+.q-card:nth-child(14){animation-delay:.52s}
+
+.q-num { font-size:0.62rem; font-weight:600; letter-spacing:0.15em; text-transform:uppercase; color:var(--rust); margin-bottom:0.5rem; }
+.q-text { font-family:'Lora',serif; font-size:1.1rem; font-weight:700; line-height:1.4; color:var(--ink); margin-bottom:1.2rem; }
+.q-text .req { color:var(--rust); font-family:'Outfit',sans-serif; }
+.multi-hint { font-size:0.72rem; color:var(--sage); background:rgba(61,107,82,0.08); display:inline-block; padding:0.22rem 0.65rem; border-radius:2px; margin-bottom:1rem; }
+
+/* ── OPTIONS ── */
+.options { display:flex; flex-direction:column; gap:0.55rem; }
+.opt {
+  display:flex; align-items:center; gap:0.8rem;
+  padding:0.78rem 1rem; border:1.5px solid var(--mist); border-radius:3px; cursor:pointer;
+  background:var(--white); transition:border-color .15s, background .15s; user-select:none;
+}
+.opt:hover { border-color:var(--ink); background:var(--bg); }
+.opt.active { border-color:var(--rust); background:rgba(184,64,26,0.04); }
+.opt.active .marker { border-color:var(--rust); background:var(--rust); }
+.opt.active .marker::after { opacity:1; }
+.marker {
+  width:17px; height:17px; flex-shrink:0; border:1.5px solid #bbb; border-radius:50%;
+  position:relative; transition:all .15s;
+}
+.marker::after {
+  content:''; width:7px; height:7px; background:white; border-radius:50%;
+  position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); opacity:0; transition:opacity .15s;
+}
+.opt.checkbox .marker { border-radius:2px; }
+.opt.checkbox.active .marker::after {
+  width:9px; height:6px; background:transparent;
+  border-bottom:2px solid white; border-left:2px solid white;
+  border-radius:0; transform:translate(-50%,-65%) rotate(-45deg);
+}
+.opt-emoji { font-size:1rem; }
+.opt-label { font-size:0.88rem; line-height:1.4; }
+
+/* ── TEXTAREA ── */
+.q-textarea {
+  width:100%; min-height:100px; border:1.5px solid var(--mist); border-radius:3px;
+  padding:0.85rem 1rem; font-family:'Outfit',sans-serif; font-size:0.88rem;
+  color:var(--ink); background:var(--white); resize:vertical; outline:none; transition:border-color .2s;
+}
+.q-textarea:focus { border-color:var(--ink); }
+.q-textarea::placeholder { color:#bbb; }
+
+/* ── SUBMIT ── */
+.submit-wrap { text-align:center; padding-top:1.5rem; }
+.btn-submit {
+  background:var(--ink); color:var(--white); border:none; padding:1rem 2.8rem;
+  font-family:'Outfit',sans-serif; font-size:0.95rem; font-weight:600;
+  letter-spacing:0.05em; border-radius:3px; cursor:pointer; transition:background .2s, transform .1s;
+}
+.btn-submit:hover { background:var(--rust); }
+.btn-submit:active { transform:scale(0.98); }
+.anon-note { margin-top:0.8rem; font-size:0.7rem; color:#aaa; }
+
+/* ── LOADING ── */
+.loading-screen { display:none; text-align:center; padding:5rem 2rem; max-width:640px; margin:0 auto; }
+.loading-screen.show { display:block; }
+.spinner {
+  width:48px; height:48px; border-radius:50%;
+  border:3px solid var(--mist); border-top-color:var(--rust);
+  animation:spin 0.8s linear infinite; margin:0 auto 1.5rem;
+}
+@keyframes spin { to{transform:rotate(360deg);} }
+.loading-screen h2 { font-family:'Lora',serif; font-size:1.5rem; font-weight:700; margin-bottom:0.6rem; }
+.loading-screen p { color:#888; font-size:0.88rem; }
+
+/* ── RESULTS ── */
+.results-screen { display:none; max-width:640px; margin:0 auto; padding:2.5rem 1.5rem 5rem; animation:fadeUp 0.5s ease; }
+.results-screen.show { display:block; }
+.results-hero {
+  background:var(--ink); color:white; border-radius:4px;
+  padding:2rem; margin-bottom:1.5rem; position:relative; overflow:hidden;
+}
+.results-hero::before {
+  content:''; position:absolute; width:200px; height:200px; border-radius:50%;
+  background:var(--sage); opacity:0.15; top:-60px; right:-60px;
+}
+.results-badge { font-size:0.62rem; font-weight:600; letter-spacing:0.15em; text-transform:uppercase; color:var(--gold); border:1px solid rgba(200,154,46,0.4); display:inline-block; padding:0.25rem 0.65rem; margin-bottom:1rem; }
+.results-hero h2 { font-family:'Lora',serif; font-size:1.6rem; font-weight:700; line-height:1.2; margin-bottom:0.5rem; }
+.results-hero p { font-size:0.82rem; color:rgba(255,255,255,0.5); }
+
+.advice-card {
+  background:var(--card); border:1px solid var(--mist); border-left:4px solid var(--sage);
+  border-radius:4px; padding:1.6rem 1.8rem; margin-bottom:1.2rem; line-height:1.7; font-size:0.9rem;
+}
+.advice-card h3 { font-family:'Lora',serif; font-size:1rem; font-weight:700; color:var(--ink); margin-bottom:0.7rem; display:flex; align-items:center; gap:0.5rem; }
+.advice-card p { margin-bottom:0.6rem; color:#333; }
+.advice-card ul { padding-left:1.2rem; margin-bottom:0.6rem; }
+.advice-card ul li { margin-bottom:0.35rem; color:#333; }
+.advice-card strong { color:var(--ink); }
+
+.restart-btn {
+  display:block; width:fit-content; margin:2rem auto 0;
+  background:transparent; border:1.5px solid var(--ink); color:var(--ink);
+  padding:0.75rem 2rem; font-family:'Outfit',sans-serif; font-size:0.88rem; font-weight:500;
+  border-radius:3px; cursor:pointer; transition:all .2s;
+}
+.restart-btn:hover { background:var(--ink); color:white; }
+
+/* ── ERROR BANNER ── */
+.error-banner {
+  display:none; background:#FFF0ED; border:1px solid #F4C0B0; border-left:4px solid var(--rust);
+  border-radius:3px; padding:1rem 1.2rem; margin-bottom:1.2rem; font-size:0.85rem; color:#7A2010; line-height:1.5;
+}
+.error-banner.show { display:block; }
+
+/* ── PRINT ── */
+@media print {
+  .hero, .prog-bar-wrap, .form-wrap, .loading-screen, .restart-btn { display:none !important; }
+  .results-screen { display:block !important; padding:1rem; }
+  .advice-card { break-inside:avoid; }
+}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-circles"><span></span><span></span><span></span></div>
+  <div class="hero-inner">
+    <div class="badge">🏫 Campaña de Salud Digital Escolar</div>
+    <h1>Pantallas y niños:<br><em>¿Cómo estamos en casa?</em></h1>
+    <p>Responde las preguntas y recibirás un informe personalizado con recomendaciones para tu familia.</p>
+  </div>
+</header>
+
+<div class="prog-bar-wrap">
+  <div class="prog-inner">
+    <div class="prog-labels">
+      <span>Tu avance</span>
+      <span id="prog-text">0 / 12</span>
+    </div>
+    <div class="prog-track"><div class="prog-fill" id="prog-fill"></div></div>
+  </div>
+</div>
+
+<!-- ═══ FORM ═══ -->
+<div id="form-area">
+<div class="form-wrap">
+
+  <!-- SECCIÓN: NIÑO/A -->
+  <div class="section-divider">
+    <div class="section-divider-line"></div>
+    <div class="section-divider-label">👧 Sobre el niño/a</div>
+    <div class="section-divider-line"></div>
+  </div>
+
+  <!-- Q1 -->
+  <div class="q-card">
+    <div class="q-num">Pregunta 1</div>
+    <div class="q-text">¿Cuántas horas al día usa pantallas el niño/a? <span class="req">*</span></div>
+    <div class="options" data-type="radio" data-id="q1">
+      <label class="opt"><span class="marker"></span><span class="opt-emoji">🌱</span><span class="opt-label">Menos de 1 hora</span></label>
+      <label class="opt"><span class="marker"></span><span class="opt-emoji">😊</span><span class="opt-label">Entre 1 y 2 horas</span></label>
+      <label class="opt"><span class="marker"></span><span class="opt-emoji">😐</span><span class="opt-label">Entre 2 y 4 horas</span></label>
+      <label class="opt"><span class="marker"></span><span class="opt-emoji">😟</span><span class="opt-label">Más de 4 horas</span></label>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="q-card">
+    <div class="q-num">Pregunta 2</div>
+    <div class="q-text">¿En qué momento del día usa más las pantallas? <span class="req">*</span></div>
+    <div class="multi-hint">☑ Puede seleccionar varias opciones</div>
+    <div class="options" data-type="checkbox" data-id="q2">
+      <label class="opt checkbox"><span class="marker"></span><span class="opt-emoji">🌅</span><span class="opt-label">Por la mañana (antes de la escuela)</span></label>
+      <label class="opt checkbox"><span class="marker"></span><span class="opt-emoji">🍽️</span><span class="opt-label">Durante las comidas</span></label>
+      <label class="opt checkbox"><span class="marker"></span><span class="opt-emoji">🌆</span><span class="opt-label">Por la tarde (al llegar a casa)</span></label>
+      <label class="opt checkbox"><span class="marker"></span><span class="opt-emoji">🌙</span><span class="opt-label">Por la noche (antes de dormir)</span></label>
+      <label class="opt checkbox"><span class="marker"></span><span class="opt-emoji">📅</span><span class="opt-label">Principalmente fines de semana</span></label>
+    </div>
+  </div>
+
+  <!-- Q3 — Contenido (sin "mensajes") -->
+  <div class="q-card">
+    <div class="q-num">Pregunta 3</div>
+    <div class="q-text">¿Qué tipo de contenido consume principalmente? <span class="req">*</span></div>
+    <div class="multi-hint">☑ Puede seleccionar varias opciones</div>
+    <div class="options" data-type="checkbox" data-id="q3">
+      <label class="opt checkbox"><span class="marker"></span><span class="opt-emoji">🎮</span><span class="opt-label">Videojuegos</span></label>
+      <label class="opt checkbox"><span class="marker"></span><span class="opt-emoji">▶️</span><span class="opt-label">Videos cortos / YouTube / TikTok / Reels</span></label>
+      <label class="opt checkbox"><span class="marker"></span><span class="opt-emoji">📺</span><span class="opt-label">Series y películas (Netflix, Disney+, etc.)</span></label>
+      <label class="opt checkbox"><span class="marker"></span><span class="opt-emoji">🎵</span><span class="opt-label">Música o podcasts</span></label>
+      <label class="opt checkbox"><span class="marker"></span><span class="opt-emoji">📚</span><span class="opt-label">Contenido educativo o tareas escolares</span></label>
+      <label class="opt checkbox"><span class="marker"></span><span class="opt-emoji">🌐</span><span class="opt-label">Navegación libre por internet</span></label>
+    </div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="q-card">
+    <div class="q-num">Pregunta 4</div>
+    <div class="q-text">¿Tienen reglas en casa sobre el tiempo de pantalla? <span class="req">*</span></div>
+    <div class="options" data-type="radio" data-id="q4">
+      <label class="opt"><span class="marker"></span><span class="opt-emoji">✅</span><span class="opt-label">Sí, y se cumplen siempre</span></label>
+      <label class="opt"><span class="marker"></span><span class="opt-emoji">⚡</span><span class="opt-label">Sí, pero a veces no se cumplen</span></label>
+      <label class="opt"><span class="marker"></span><span class="opt-emoji">💭</span><span class="opt-label">No, pero estamos pensando en ponerlas</span></label>
+      <label class="opt"><span class="marker"></span><span class="opt-emoji">❌</span><span class="opt-label">No tenemos reglas al respecto</span></label>
+    </div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="q-card">
+    <div class="q-num">Pregunta 5</div>
+    <div class="q-text">¿Ha notado alguna de estas señales en el niño/a? <span class="req">*</span></div>
+    <div class="multi-hint">☑ Puede seleccionar varias opciones</div>
+    <div class="options" data-type="checkbox" data-id="q5">
+      <label class="opt checkbox"><span class="marker"></span><span class="opt-emoji">😴</span><span class="opt-label">Problemas para dormir</span></label>
+      <label class="opt checkbox"><span class="marker"></span><span class="opt-emoji">👀</span><span class="opt-label">Ojos cansados o irritados</span></label>
+      <label class="opt checkbox"><span class="marker"></span><span class="opt-emoji">😠</span><span class="opt-label">Se enoja cuando le quitan el dispositivo</span></label>
+      <label class="opt checkbox"><span class="marker"></span><span class="opt-emoji">🏠</span><span class="opt-label">Prefiere la pantalla a jugar afuera o con otros</span></label>
+      <label class="opt checkbox"><span class="marker"></span><span class="opt-emoji">📉</span><span class="opt-label">Ha bajado su rendimiento escolar</span></label>
+      <label class="opt checkbox"><span class="marker"></span><span class="opt-emoji">🤐</span><span class="opt-label">Se ha vuelto más retraído/a o poco comunicativo/a</span></label>
+      <label class="opt checkbox"><span class="marker"></span><span class="opt-emoji">🚫</span><span class="opt-label">Ninguna de las anteriores</span></label>
+    </div>
+  </div>
+
+  <!-- Q6 — Opción múltiple (checkbox) -->
+  <div class="q-card">
+    <div class="q-num">Pregunta 6</div>
+    <div class="q-text">¿El niño/a usa pantallas solo/a o acompañado/a? <span class="req">*</span></div>
+    <div class="multi-hint">☑ Puede seleccionar varias opciones</div>
+    <div class="options" data-type="checkbox" data-id="q6">
+      <label class="opt checkbox"><span class="marker"></span><span class="opt-emoji">👨‍👩‍👧</span><span class="opt-label">Siempre acompañado/a por un adulto</span></label>
+      <label class="opt checkbox"><span class="marker"></span><span class="opt-emoji">🔀</span><span class="opt-label">A veces acompañado/a, a veces solo/a</span></label>
+      <label class="opt checkbox"><span class="marker"></span><span class="opt-emoji">🚪</span><span class="opt-label">Generalmente solo/a en su cuarto</span></label>
+      <label class="opt checkbox"><span class="marker"></span><span class="opt-emoji">🏠</span><span class="opt-label">En espacios comunes de la casa</span></label>
+      <label class="opt checkbox"><span class="marker"></span><span class="opt-emoji">👫</span><span class="opt-label">Con hermanos/as u otros niños</span></label>
+    </div>
+  </div>
+
+  <!-- SECCIÓN: PADRES -->
+  <div class="section-divider">
+    <div class="section-divider-line"></div>
+    <div class="section-divider-label">👨‍👩‍👦 Sobre los padres / cuidadores</div>
+    <div class="section-divider-line"></div>
+  </div>
+
+  <!-- Q7 -->
+  <div class="q-card">
+    <div class="q-num">Pregunta 7</div>
+    <div class="q-text">¿Le presta el celular, tablet u otro dispositivo a su hijo/a para mantenerlo entretenido o tranquilo? <span class="req">*</span></div>
+    <div class="options" data-type="radio" data-id="q7">
+      <label class="opt"><span class="marker"></span><span class="opt-emoji">🔄</span><span class="opt-label">Siempre</span></label>
+      <label class="opt"><span class="marker"></span><span class="opt-emoji">⚡</span><span class="opt-label">A veces</span></label>
+      <label class="opt"><span class="marker"></span><span class="opt-emoji">🌿</span><span class="opt-label">Casi nunca</span></label>
+      <label class="opt"><span class="marker"></span><span class="opt-emoji">🚫</span><span class="opt-label">Nunca</span></label>
+    </div>
+  </div>
+
+  <!-- Q8 -->
+  <div class="q-card">
+    <div class="q-num">Pregunta 8</div>
+    <div class="q-text">¿En qué situaciones suele darle el dispositivo? <span class="req">*</span></div>
+    <div class="multi-hint">☑ Puede seleccionar varias opciones</div>
+    <div class="options" data-type="checkbox" data-id="q8">
+      <label class="opt checkbox"><span class="marker"></span><span class="opt-emoji">🧹</span><span class="opt-label">Mientras hago tareas de la casa</span></label>
+      <label class="opt checkbox"><span class="marker"></span><span class="opt-emoji">😤</span><span class="opt-label">Para que esté tranquilo/a o no llore</span></label>
+      <label class="opt checkbox"><span class="marker"></span><span class="opt-emoji">💼</span><span class="opt-label">Cuando estoy ocupado/a o trabajando</span></label>
+      <label class="opt checkbox"><span class="marker"></span><span class="opt-emoji">🚗</span><span class="opt-label">Durante viajes o salidas</span></label>
+      <label class="opt checkbox"><span class="marker"></span><span class="opt-emoji">📝</span><span class="opt-label">Para tareas escolares</span></label>
+      <label class="opt checkbox"><span class="marker"></span><span class="opt-emoji">➕</span><span class="opt-label">Otra situación</span></label>
+    </div>
+  </div>
+
+  <!-- Q9 -->
+  <div class="q-card">
+    <div class="q-num">Pregunta 9</div>
+    <div class="q-text">¿Hablan en casa sobre el uso responsable de las pantallas? <span class="req">*</span></div>
+    <div class="options" data-type="radio" data-id="q9">
+      <label class="opt"><span class="marker"></span><span class="opt-emoji">💬</span><span class="opt-label">Sí</span></label>
+      <label class="opt"><span class="marker"></span><span class="opt-emoji">🔄</span><span class="opt-label">A veces</span></label>
+      <label class="opt"><span class="marker"></span><span class="opt-emoji">❌</span><span class="opt-label">No</span></label>
+    </div>
+  </div>
+
+  <!-- Q10 -->
+  <div class="q-card">
+    <div class="q-num">Pregunta 10</div>
+    <div class="q-text">¿Usted, como padre/madre, también usa mucho el celular frente a su hijo/a? <span class="req">*</span></div>
+    <div class="options" data-type="radio" data-id="q10">
+      <label class="opt"><span class="marker"></span><span class="opt-emoji">😔</span><span class="opt-label">Sí, con mucha frecuencia</span></label>
+      <label class="opt"><span class="marker"></span><span class="opt-emoji">😐</span><span class="opt-label">A veces, cuando es necesario</span></label>
+      <label class="opt"><span class="marker"></span><span class="opt-emoji">😊</span><span class="opt-label">Intento evitarlo cuando estoy con él/ella</span></label>
+      <label class="opt"><span class="marker"></span><span class="opt-emoji">🌱</span><span class="opt-label">Casi nunca uso el celular frente a él/ella</span></label>
+    </div>
+  </div>
+
+  <!-- Q11 -->
+  <div class="q-card">
+    <div class="q-num">Pregunta 11</div>
+    <div class="q-text">¿Nota que su hijo/a, al hacer tareas o dibujos, busca ideas en el celular en lugar de usar su propia imaginación? <span class="req">*</span></div>
+    <div class="options" data-type="radio" data-id="q11">
+      <label class="opt"><span class="marker"></span><span class="opt-emoji">😟</span><span class="opt-label">Siempre</span></label>
+      <label class="opt"><span class="marker"></span><span class="opt-emoji">😐</span><span class="opt-label">A veces</span></label>
+      <label class="opt"><span class="marker"></span><span class="opt-emoji">😊</span><span class="opt-label">Casi nunca</span></label>
+      <label class="opt"><span class="marker"></span><span class="opt-emoji">🌱</span><span class="opt-label">Nunca</span></label>
+    </div>
+  </div>
+
+  <!-- Q12 — Regla 20-20-20 -->
+  <div class="q-card">
+    <div class="q-num">Pregunta 12</div>
+    <div class="q-text">¿Conocías la regla 20-20-20 para cuidar los ojos? <span class="req">*</span></div>
+    <div class="options" data-type="radio" data-id="q12">
+      <label class="opt"><span class="marker"></span><span class="opt-emoji">⭐</span><span class="opt-label">Sí, ya la practicamos</span></label>
+      <label class="opt"><span class="marker"></span><span class="opt-emoji">📖</span><span class="opt-label">Sí, pero no la aplicamos</span></label>
+      <label class="opt"><span class="marker"></span><span class="opt-emoji">🆕</span><span class="opt-label">No, acabo de conocerla hoy</span></label>
+    </div>
+  </div>
+
+  <!-- Q13 — Abierta -->
+  <div class="q-card">
+    <div class="q-num">Pregunta 13</div>
+    <div class="q-text">Después de esta información, ¿qué cambiarías en casa?</div>
+    <textarea class="q-textarea" id="q13" placeholder="Ej: Pondré un límite de 1 hora al día, crearé zonas sin pantallas, apagaré los dispositivos 1 hora antes de dormir…"></textarea>
+  </div>
+
+  <div class="submit-wrap">
+    <button class="btn-submit" id="btn-submit" onclick="handleSubmit()">
+      ✨ Ver mi informe personalizado
+    </button>
+    <div class="anon-note">● Respuestas anónimas — solo con fines educativos</div>
+  </div>
+
+</div>
+</div>
+
+<!-- ═══ LOADING ═══ -->
+<div class="loading-screen" id="loading-screen">
+  <div class="spinner"></div>
+  <h2>Analizando tus respuestas…</h2>
+  <p>Preparando el informe personalizado para tu familia.</p>
+</div>
+
+<!-- ═══ RESULTS ═══ -->
+<div class="results-screen" id="results-screen">
+  <div class="results-hero">
+    <div class="results-badge">📋 Informe personalizado</div>
+    <h2>Tu informe familiar está listo</h2>
+    <p>Basado en tus respuestas, aquí están nuestras recomendaciones específicas para ti.</p>
+  </div>
+  <div id="advice-container"></div>
+  <div class="error-banner" id="error-banner"></div>
+  <button class="restart-btn" onclick="restart()">↩ Realizar encuesta de nuevo</button>
+</div>
+
+<script>
+// ── TOTAL PREGUNTAS ──────────────────────────────────────
+const TOTAL = 13;
+
+// ── INTERACTION ──────────────────────────────────────────
+document.querySelectorAll('[data-type="radio"]').forEach(group => {
+  group.querySelectorAll('.opt').forEach(opt => {
+    opt.addEventListener('click', () => {
+      group.querySelectorAll('.opt').forEach(o => o.classList.remove('active'));
+      opt.classList.add('active');
+      updateProgress();
+    });
+  });
+});
+
+document.querySelectorAll('[data-type="checkbox"]').forEach(group => {
+  group.querySelectorAll('.opt').forEach(opt => {
+    opt.addEventListener('click', () => {
+      opt.classList.toggle('active');
+      updateProgress();
+    });
+  });
+});
+
+document.getElementById('q13').addEventListener('input', updateProgress);
+
+function countAnswered() {
+  let n = 0;
+  const radioIds = ['q1','q4','q7','q9','q10','q11','q12'];
+  const checkboxIds = ['q2','q3','q5','q6','q8'];
+  for (const id of radioIds) {
+    if (document.querySelectorAll(`[data-id="${id}"] .opt.active`).length > 0) n++;
+  }
+  for (const id of checkboxIds) {
+    if (document.querySelectorAll(`[data-id="${id}"] .opt.active`).length > 0) n++;
+  }
+  if (document.getElementById('q13').value.trim()) n++;
+  return n;
+}
+
+function updateProgress() {
+  const n = countAnswered();
+  document.getElementById('prog-text').textContent = `${n} / ${TOTAL}`;
+  document.getElementById('prog-fill').style.width = `${(n / TOTAL) * 100}%`;
+}
+
+// ── COLLECT ANSWERS ──────────────────────────────────────
+function collectAnswers() {
+  const answers = {};
+  const questions = {
+    q1:  "¿Cuántas horas al día usa pantallas el niño/a?",
+    q2:  "¿En qué momento del día usa más las pantallas?",
+    q3:  "¿Qué tipo de contenido consume principalmente?",
+    q4:  "¿Tienen reglas en casa sobre el tiempo de pantalla?",
+    q5:  "¿Ha notado alguna de estas señales en el niño/a?",
+    q6:  "¿El niño/a usa pantallas solo/a o acompañado/a?",
+    q7:  "¿Le presta el dispositivo a su hijo/a para mantenerlo tranquilo o entretenido?",
+    q8:  "¿En qué situaciones suele darle el dispositivo?",
+    q9:  "¿Hablan en casa sobre el uso responsable de las pantallas?",
+    q10: "¿El padre/madre también usa mucho el celular frente al niño/a?",
+    q11: "¿Su hijo/a busca ideas en el celular en lugar de usar su propia imaginación?",
+    q12: "¿Conocía la regla 20-20-20 para cuidar los ojos?"
+  };
+  for (const [id, question] of Object.entries(questions)) {
+    const selected = [...document.querySelectorAll(`[data-id="${id}"] .opt.active`)]
+      .map(el => el.querySelector('.opt-label').textContent.trim());
+    answers[question] = selected.length > 0 ? selected.join(', ') : 'Sin respuesta';
+  }
+  answers["¿Qué cambiarías en casa?"] = document.getElementById('q13').value.trim() || 'Sin respuesta';
+  return answers;
+}
+
+
+// ── GENERAR ANÁLISIS ────────────────────────────────────
+function generateLocalAnalysis(answers) {
+  const horas = answers["¿Cuántas horas al día usa pantallas el niño/a?"];
+  const reglas = answers["¿Tienen reglas en casa sobre el tiempo de pantalla?"];
+  const señales = answers["¿Ha notado alguna de estas señales en el niño/a?"];
+  const acompañamiento = answers["¿El niño/a usa pantallas solo/a o acompañado/a?"];
+  const creatividad = answers["¿Su hijo/a busca ideas en el celular en lugar de usar su propia imaginación?"];
+  const dispositivo = answers["¿Le presta el dispositivo a su hijo/a para mantenerlo tranquilo o entretenido?"];
+  const habla = answers["¿Hablan en casa sobre el uso responsable de las pantallas?"];
+  const regla202020 = answers["¿Conocía la regla 20-20-20 para cuidar los ojos?"];
+
+  let resumen = `
+    <h3>📌 Resumen de la situación actual</h3>
+    <p>Según las respuestas, el niño/a utiliza pantallas principalmente: <strong>${horas}</strong>. Además, el contenido que más consume y los momentos de uso muestran hábitos digitales presentes en la rutina diaria del hogar. La encuesta refleja una familia interesada en mejorar y acompañar el uso de la tecnología de forma más saludable.</p>
+  `;
+
+  let atencion = `
+    <h3>⚠️ Áreas de atención</h3>
+    <ul>
+  `;
+
+  if (señales !== "Ninguna de las anteriores" && señales !== "Sin respuesta") {
+    atencion += `<li>Se observaron algunas señales relacionadas con el uso de pantallas: <strong>${señales}</strong>.</li>`;
+  }
+
+  if (acompañamiento.includes("solo")) {
+    atencion += `<li>El uso de dispositivos en soledad puede aumentar el tiempo de exposición y dificultar el control del contenido.</li>`;
+  }
+
+  if (dispositivo.includes("Siempre") || dispositivo.includes("A veces")) {
+    atencion += `<li>Usar el dispositivo para tranquilizar o entretener puede convertirlo en una forma automática de regulación emocional.</li>`;
+  }
+
+  if (reglas.includes("No")) {
+    atencion += `<li>La falta de límites claros puede hacer más difícil mantener hábitos saludables con las pantallas.</li>`;
+  }
+
+  atencion += `</ul>`;
+
+  let recomendaciones = `
+    <h3>🏡 Recomendaciones para el hogar</h3>
+    <ul>
+      <li>Crear horarios específicos para el uso de pantallas.</li>
+      <li>Evitar el uso de dispositivos durante las comidas y antes de dormir.</li>
+      <li>Fomentar juegos, lectura y actividades creativas sin pantallas.</li>
+      <li>Conversar en familia sobre el uso responsable de internet y redes.</li>
+      <li>Dar el ejemplo reduciendo el uso del celular frente a los niños.</li>
+      <li>Aplicar la regla 20-20-20 para descansar la vista.</li>
+    </ul>
+  `;
+
+  let creatividadHTML = "";
+
+  if (creatividad.includes("Siempre") || creatividad.includes("A veces")) {
+    creatividadHTML = `
+      <h3>🎨 Imaginación y creatividad</h3>
+      <p>Es importante que los niños puedan desarrollar ideas propias sin depender siempre de lo que ven en internet. La creatividad ayuda al pensamiento, la resolución de problemas y la confianza personal.</p>
+      <ul>
+        <li>Proponer dibujos libres sin copiar imágenes.</li>
+        <li>Inventar historias o juegos en familia.</li>
+        <li>Realizar manualidades, pintura o juegos simbólicos.</li>
+      </ul>
+    `;
+  }
+
+  let ojos = "";
+
+  if (regla202020.includes("No") || regla202020.includes("no")) {
+    ojos = `<p><strong>Regla 20-20-20:</strong> cada 20 minutos, mirar algo a 20 pies (6 metros) durante 20 segundos ayuda a descansar la vista.</p>`;
+  }
+
+  let cierre = `
+    <h3>💛 Mensaje final</h3>
+    <p>Pequeños cambios diarios pueden generar una gran diferencia en el bienestar de los niños. Lo importante no es eliminar completamente las pantallas, sino acompañar su uso con límites, diálogo y momentos compartidos en familia.</p>
+    ${ojos}
+  `;
+
+  return resumen + atencion + recomendaciones + creatividadHTML + cierre;
+}
+
+// ── SUBMIT ───────────────────────────────────────────────
+async function handleSubmit() {
+  const answered = countAnswered();
+
+  if (answered < 9) {
+    alert('Por favor responde al menos las primeras preguntas antes de continuar.');
+    return;
+  }
+
+  document.getElementById('form-area').style.display = 'none';
+  document.getElementById('loading-screen').classList.add('show');
+  document.getElementById('prog-fill').style.width = '100%';
+  document.getElementById('prog-text').textContent = `${TOTAL} / ${TOTAL}`;
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  const answers = collectAnswers();
+
+  setTimeout(() => {
+    const analysis = generateLocalAnalysis(answers);
+
+    document.getElementById('loading-screen').classList.remove('show');
+
+    const resultsScreen = document.getElementById('results-screen');
+    resultsScreen.classList.add('show');
+
+    renderAdvice(analysis);
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, 1800);
+}
+
+// ── RESTART ──────────────────────────────────────────────
+function restart() {
+  document.querySelectorAll('.opt.active').forEach(o => o.classList.remove('active'));
+  document.getElementById('q13').value = '';
+  document.getElementById('error-banner').classList.remove('show');
+  document.getElementById('advice-container').innerHTML = '';
+  updateProgress();
+  document.getElementById('results-screen').classList.remove('show');
+  document.getElementById('form-area').style.display = 'block';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+</body>
+</html>
